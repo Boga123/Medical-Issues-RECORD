@@ -54,3 +54,71 @@ HTML.
     </script>
   </body>
 </html>
+
+
+
+
+
+
+javascript part>----
+
+
+document.getElementById('issueInputForm').addEventListener('submit',saveIssue);
+
+function saveIssue(e) {
+  var issueDesc= document.getElementById('issueDescInput').value;
+  var issueSeverity=document.getElementById('issueSeverityInput').value;
+  var issueAssignedTo=document.getElementById('issueAssigntoInput').value;
+  var issueId =chance.guid();
+  var issueStatus ='open';
+
+  var issue = {
+  id: issueId,
+  description:issueDescription,
+  assignedTo:issueAssignedTo,
+  severity:issueSeverity,
+  status:issueStatus
+  }
+  if(localStorage.getItems('issues')==null){
+     var issues=[];
+     issues.push(issue);
+     localStorage.setItems('issues',JASON.stringify(issues))
+   }else {
+     var issues= JASON.parse(localStorage.getItems('issues'));
+     issues.push(issue);
+     localStorage.setItems('issues',JASON.stringify(issues));
+   }
+   document.getElementById('issueInputForm').reset();
+   fetchIssues();
+   e.preventDefault();
+}
+
+function fetchIssues(){
+
+var issues = JASON.parse(localStorage.getItems('issues'));
+var listIssues = document.getElementById('listIssues');
+
+listIssues.innerHTML='';
+
+for( var i=0 ; i<issues.length;i++){
+
+var id= issues[i].id;
+var des= issues[i].Description;
+var severity=issues[i].severity;
+var assignTo=issues[i].assignTo;
+var status =issues[i].status;
+
+issuesList.innerHTML+='<div class="well">'+
+'<h6> Issues ID' +id+ '<h6>' +
+'<p><span class="label label-info">' +status+ '</span></p>'+
+'<h3>'+desc+'<h3>'+
+'<p><span class="glyficon glyficon-time">'+severity+'</span></p>'+
+'<p><span class="glyficon glyficon-user">'+assignTo+'</span></p>'+
+'<a href="#" onClick="setStatusClosed(\''+id+'\')" class="btn btn-warning">close</a>'+
+'<a  href ="#" onClick=deleteIssues(\''+id+'\') class ="btn btn-danger">delete</a>'+
+'</div>'
+
+}
+
+
+}
